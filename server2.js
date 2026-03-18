@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const db = require('./db');
+require('dotenv').config();
 
 const Person = require('./models/Person');
 const Menu = require('./models/Menu');
@@ -179,6 +180,11 @@ app.get('/menu/:menutype', async(req,res)=>{
 
 
 /* ================= SERVER ================= */
+
+const mongoURL = process.env.PORT;
+
+
+
 const personRoutes = require('./routes/personRoutes');
 app.use('/person', personRoutes);
 
