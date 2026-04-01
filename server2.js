@@ -1,19 +1,43 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
 const db = require('./db');
-require('dotenv').config();
+
 
 const Person = require('./models/Person');
 const Menu = require('./models/Menu');
 
+const passport = require('./auth');
+app.use( passport.initialize());
+
+
+
 app.use(express.json());
+
+
+// MIDDLE WARE
+
+const logRequest = (req, res, next) => {
+    console.log(`[${new Date().toLocaleString()}] Request Made to: ${req.orignalUrl}`);
+    next();
+}
+
+app.use(logRequest);        // for all api's
+
+
+// CONFIGURE LOCAL STRATEGY
+
+ // IN auth.js
 
 /* ---------------- HOME ROUTE ---------------- */
 
-app.get('/', function (req, res) {
+const localMiddleware = passport.authenticate('local', { session: false });
+
+app.get('/', localMiddleware, function (req, res) {
     res.send('Hi!!! How are you?? what you want???');
 });
+
 
 
 /* ================= PERSON API ================= */
@@ -181,7 +205,7 @@ app.get('/menu/:menutype', async(req,res)=>{
 
 /* ================= SERVER ================= */
 
-const mongoURL = process.env.PORT;
+const mongoURL = process.env.PORT || 5000;
 
 
 
