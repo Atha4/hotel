@@ -65,7 +65,7 @@ app.post('/person', async (req,res) =>{
 
 /* GET ALL PERSON */
 
-app.get('/person', async (req,res)=>{
+app.get('/person',localMiddleware, async (req,res)=>{
     try{
 
         const data = await Person.find();

@@ -1,9 +1,6 @@
 const Person = require('./models/Person');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
-
-
 passport.use(new LocalStrategy(async (USERNAME, password, done) =>{
     try{
         console.log('Recieved credentials', USERNAME, password);
@@ -12,7 +9,7 @@ passport.use(new LocalStrategy(async (USERNAME, password, done) =>{
             return done(null, false, {message:'Invalid User:'});
        
         
-        const isPasswordMatch = user.password === password ? true : false;
+        const isPasswordMatch = await user.comparePassword(password);
         if(isPasswordMatch){
             return done(null, user);
         }
